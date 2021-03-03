@@ -1,0 +1,1 @@
+# WVD-Azure-Image-Builder
