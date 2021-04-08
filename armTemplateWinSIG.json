@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "imageTemplateName": {
+        "type": "string"
+        },
+        "api-version": {
+          "type": "string"
+        },
+        "svclocation": {
+            "type": "string"
+        }
+    },
+    
+    "variables": {
+    },
+
+
+    "resources": [
+      {
+        "name": "[parameters('imageTemplateName')]",
+        "type": "Microsoft.VirtualMachineImages/imageTemplates",
+        "apiVersion": "[parameters('api-version')]",
+        "location": "[parameters('svclocation')]",
+        "dependsOn": [],
+        "tags": {
+            "imagebuilderTemplate": "AzureImageBuilderSIG",
+            "userIdentity": "enabled"
+                },
+            "identity": {
+                "type": "UserAssigned",
+                        "userAssignedIdentities": {
+                        "": {}
+                            
+                    }
+                    },
+        
+        "properties": {
+            "buildTimeoutInMinutes" : 100,
+
+            "vmProfile": 
+                    {
+                    "vmSize": "Standard_D1_v2",
+                    "osDiskSizeGB": 127
+                    },
+        
+            "source": {
+                "type": "PlatformImage",
+                    "publisher": "MicrosoftWindowsDesktop",
+                    "offer": "windows-10",
+                    "sku": "20h1-evd-o365pp",
+                    "version": "latest"
+                
+            },
+            "customize": [
+
+                    {
+                        "type": "PowerShell",
+                        "name": "CreateBuildPath",
+                        "scriptUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuildTeamMedia.ps1"
+                    },
+                    {
+                        "type": "WindowsRestart",
+                        "restartCheckCommand": "echo Azure-Image-Builder-Restarted-the-VM  > c:\\temp\\buildArtifacts\\azureImageBuilderRestart.txt",
+                        "restartTimeout": "5m"
+                    },
+                    {
+                        "type": "File",
+                        "name": "downloadBuildArtifacts",
+                        "sourceUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/index.html",
+                        "destination":"c:\\temp\\buildArtifacts\\index.html"
+                    },
+        
+                    {
+                        "type": "PowerShell",
+                        "name": "settingUpMgmtAgtPath",
+                        "inline": [
+                            "mkdir c:\\Temp\\buildActions",
+                            "echo Azure-Image-Builder-Was-Here  > c:\\temp\\buildActions\\buildActionsOutput.txt"
+                        ]
+                    },
+                        
+                    {
+                        "type": "WindowsUpdate",
+                        "searchCriteria": "IsInstalled=0",
+                        "filters": [
+                            "exclude:$_.Title -like '*Preview*'",
+                            "include:$true"
+                                    ],
+                        "updateLimit": 40
+                    }
+
+            ],
+            "distribute": 
+            [
+                {   
+                    "type": "SharedImage",
+                    "galleryImageId": "/subscriptions/28668175-56a0-43aa-b993-e308e15a4844/resourceGroups/Telcosa-AzureImageBuilder/providers/Microsoft.Compute/galleries/telcosaSIG/images/win10imageAppsTeams",
+                    "runOutputName": "winclientR01",
+                    "artifactTags": {
+                        "source": "azureVmImageBuilder",
+                        "baseosimg": "windows-10"
+                    },
+                    "replicationRegions": [
+                      "northeurope",
+                      "westeurope"
+                    ]
+                }
+            ]
+            }
+        }
+
+    
+    ]
+}    
+
+
+
+
+
+
+
+
