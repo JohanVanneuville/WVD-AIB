@@ -24,13 +24,13 @@ $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
 $subscriptionID=$currentAzContext.Subscription.Id
 # Destination image resource group
-$imageResourceGroup="Telcosa-AzureImageBuilder"
+$imageResourceGroup="TLC01MP-AIBRG01"
 # Location
-$location="NorthEurope"
+$location="WestEurope"
 # Image distribution metadata reference name
 $runOutputName="aibCustWinManImg02ro"
 # Image template name
-$imageTemplateName="helloImageTemplateWin10ps"
+$imageTemplateName="WVD-Telcosa-AIBW10Image"
 # Distribution properties object name (runOutput).
 # This gives you the properties of the managed image on completion.
 $runOutputName="winclientR01"
@@ -77,13 +77,13 @@ https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
 ## 3. CREATE THE SHARED IMAGE GALLERY
 # Set Image gallery name
-$sigGalleryName= "telcosaSIG"
+$sigGalleryName= "TLCAIBSIG"
 
 # Image definition name - define an appropriate name
 # Server:
 $imageDefName ="winSvrimage"
 # Or Win 10 Client 
-$imageDefName ="win10imageAppsTeams"
+$imageDefName ="TLC01MP-WVD-W10-20H2"
 
 # Additional replication region, this is the secondary Azure region in addition to the $location above.
 $replRegion2="westeurope"
