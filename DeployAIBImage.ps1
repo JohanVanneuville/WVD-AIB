@@ -1,4 +1,4 @@
-﻿### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
+### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
 #Register AIB
 Install-Module Az -Force
 Connect-AzAccount
@@ -14,7 +14,7 @@ Get-AzResourceProvider -ProviderNamespace Microsoft.Storage | Select-Object Regi
 Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
 Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
 Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
-Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVaul
+Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
 
 ##Once registered begin your AIB image deployment##
 
@@ -24,7 +24,7 @@ $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
 $subscriptionID=$currentAzContext.Subscription.Id
 # Destination image resource group
-$imageResourceGroup="AzureImageBuilder"
+$imageResourceGroup="Telcosa-AzureImageBuilder"
 # Location
 $location="NorthEurope"
 # Image distribution metadata reference name
@@ -77,7 +77,7 @@ https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
 ## 3. CREATE THE SHARED IMAGE GALLERY
 # Set Image gallery name
-$sigGalleryName= "AIBSIG"
+$sigGalleryName= "telcosaSIG"
 
 # Image definition name - define an appropriate name
 # Server:
@@ -113,9 +113,9 @@ New-AzGalleryImageDefinition `
    -Name $imageDefName `
    -OsState generalized `
    -OsType Windows `
-   -Publisher 'myCompany' `
-   -Offer 'Windows-10-App-Teams' `
-   -Sku '19h2-evd'
+   -Publisher 'MicrosoftWindowsDesktop' `
+   -Offer 'windows-10' `
+   -Sku '20h1-evd-o365pp'
 
 
 ## 3.2 DOWNLOAD AND CONFIGURE THE TEMPLATE WITH YOUR PARAMS
