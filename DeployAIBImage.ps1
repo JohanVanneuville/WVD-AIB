@@ -57,7 +57,7 @@ $identityNameResourceId=$(Get-AzUserAssignedIdentity -ResourceGroupName $imageRe
 $identityNamePrincipalId=$(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
 ## ASSIGN PERMISSIONS FOR THIS IDENTITY TO DISTRIBUTE IMAGES
-$aibRoleImageCreationUrl="https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/aibRoleImageCreation.json"
+$aibRoleImageCreationUrl="https://github.com/JohanVanneuville/WVD-AIB/blob/main/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 # Download config
@@ -122,7 +122,7 @@ New-AzGalleryImageDefinition `
    $templateFilePath = "armTemplateWinSIG.json"
 
 Invoke-WebRequest `
-   -Uri "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MS.json" `
+   -Uri "https://github.com/JohanVanneuville/WVD-AIB/blob/main/AIBWin10MS.json" `
    -OutFile $templateFilePath `
    -UseBasicParsing
 
